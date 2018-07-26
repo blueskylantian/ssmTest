@@ -13,7 +13,7 @@ public class SendEmail {
 //    public static final int PORT = 25;
 
     public static final String FROM = "981179142@qq.com";//发件人的email
-    public static final String PWD = "zfrxnffopxxybeba";//客户端授权码
+    public static final String PWD = "************";//客户端授权码
 
 
     /**
