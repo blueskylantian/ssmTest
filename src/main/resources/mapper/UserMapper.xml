@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dsy.dao.UserMapper" >
+
+  <insert id="insert" parameterType="user">
+    insert into user(userid,username,state,code) values(#{userid},#{username},0,#{code})
+  </insert>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultType="user">
+        select * from user where userid = #{userid}
+    </select>
+
+  <select id="findByName" resultType="user">
+    select * from user where username = #{username} and state = 1
+  </select>
+
+
+    <update id="updateState" parameterType="user">
+        update user
+        set state = 1
+        where userid = #{userid}
+    </update>
+
+
+    <select id="findByCode" resultType="user">
+        select * from user where code = #{code} and state = 0
+    </select>
+
+
+
+
+
+
+
+</mapper>

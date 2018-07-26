@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dsy.dao.BorrowMapper">
+    <resultMap id="BaseResultMap" type="com.dsy.entity.Borrow">
+        <id column="borrowid" property="borrowid" jdbcType="INTEGER"/>
+        <result column="bookid" property="bookid" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="time" property="time" jdbcType="TIME"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    borrowid, bookid, userid, time
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from borrow
+        where borrowid = #{borrowid,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" parameterType="com.dsy.entity.Borrow">
+    insert into borrow (borrowid, bookid, userid, 
+      time,bstate)
+    values (#{borrowid,jdbcType=INTEGER}, #{bookid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{time,jdbcType=TIMESTAMP},0)
+  </insert>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.dsy.entity.Borrow">
+    update borrow
+    set bookid = #{bookid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      bstate = #{bstate,jdbcType=INTEGER}
+    where borrowid = #{borrowid,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="findBorrowsByUserId" resultMap="getBorrows">
+        select
+        book.name,borrow.*
+        from book,borrow
+        where borrow.bookid = book.bookid and borrow.userid = #{userid} and borrow.bstate = 0  limit #{start},8
+    </select>
+
+
+    <!--查询某个用户借阅表关联查询书本信息-->
+    <resultMap id="getBorrows" type="borrow">
+        <!--借阅表属性-->
+        <id column="borrowid" property="borrowid"/>
+        <result column="bookid" property="bookid"/>
+        <result column="userid" property="userid"/>
+        <result column="bstate" property="bstate"/>
+        <result column="time" property="time"/>
+        <!--关联的书本信息-->
+        <!-- association用于1对1关联查询：
+        property指属性，javaType是要映射的对象的类型。 -->
+        <association property="book" javaType="book">
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="findBorrowsCountByUserId" resultType="INTEGER">
+        select count(*) from borrow where userid = #{userid} and bstate = 0
+    </select>
+
+
+</mapper>
